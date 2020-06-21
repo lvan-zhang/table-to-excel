@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>表格下载小工具</title>
+  <style type="text/css">
+  textarea {
+    width: 500px;
+    height: 300px;
+  }
+  </style>
+</head>
+
+<body>
+  <div>
+    <div>表格下载小工具</div>
+    <div>
+      <p>使用步骤：</p>
+      <p>1. 打开目标网站，例如（http://www.shaanxi.gov.cn/qkql/2020zkzlhz/171666.htm）</p>
+      <p>2. 右键网页点击审查元素，点击console，在上面输入document.getElementsByTagName("table")[0].innerHTML</p>
+      <p>3. 复制（右下角有个copy按钮）得到的东西，放到我们网站的输入框里</p>
+      <p>4. 点击下载</p>
+    </div>
+    <textarea id="text"></textarea><br>
+    <button type="button" id="j_btn">点击下载</button>
+  </div>
+</body>
+<script>
+function base64(content) {
+  return window.btoa(unescape(encodeURIComponent(content)));
+}
+function tableToExcel(text) {
+  var excelFile = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel' xmlns='http://www.w3.org/TR/REC-html40'>";
+  excelFile += "<head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head>";
+  excelFile += "<body><table width='10%'  border='1'>";
+  excelFile += text;
+  excelFile += "</table></body>";
+  excelFile += "</html>";
+  var link = "data:application/vnd.ms-excel;base64," + base64(excelFile);
+  var a = document.createElement("a");
+  a.download = '表格文件' + ".xlsx";
+  a.href = link;
+  a.click();
+}
+window.onload = function(){
+  var btn = document.getElementById("j_btn");
+  // 监听点击事件
+  btn.addEventListener('click', function(){
+    let text = document.getElementById("text").value;
+    tableToExcel(text);
+  })
+}
+</script>
+</html>
